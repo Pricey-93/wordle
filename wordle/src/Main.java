@@ -1,8 +1,11 @@
 public class Main {
 
     public static void main(String[] args) {
-        Model model =new Model();
-        View view = new View();
-        Controller controller = new Controller(model, view);
+        javax.swing.SwingUtilities.invokeLater(Main::createAndShowGui);
+    }
+    public static void createAndShowGui() {
+        Model model = new Model();
+        Controller controller = new Controller(model);
+        View view = new View(model, controller);
     }
 }

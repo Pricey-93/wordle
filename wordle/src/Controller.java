@@ -2,10 +2,8 @@
 public class Controller {
 
     private final Model model;
-    private final View view;
 
-    public Controller(Model model, View view) {
+    public Controller(Model model) {
         this.model = model;
-        this.view = view;
     }
 }
