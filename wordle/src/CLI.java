@@ -36,6 +36,7 @@ public class CLI {
             printGuessArrayList();
             if (model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
                 displayWin();
+                model.increaseGamesCompleted();
                 model.setGameOver();
             }
             else {
@@ -46,6 +47,7 @@ public class CLI {
             }
             if (model.getNumberOfGuesses() == model.getMaxGuesses()) {
                 displayLoss();
+                model.increaseGamesCompleted();
                 model.setGameOver();
             }
         }
