@@ -3,37 +3,46 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Observable;
+import java.util.*;
 
 public class Model extends Observable {
 
-    private final boolean ERROR_MODE = false;
-    private final boolean TEST_MODE = false;
-    private final boolean RANDOM_MODE = false;
-    private final Path SECRET_WORD_PATH = Paths.get("resources/common.txt");
-    private final Path VALID_WORD_PATH = Paths.get("resources/words.txt");
-    private final List<String> SECRET_WORD_BANK;
-    private final List<String> VALID_WORD_BANK;
-    private final int INITIAL_CAPACITY = 5;
+    private static final boolean ERROR_MODE = false;
+    private static final boolean TEST_MODE = false;
+    private static final boolean RANDOM_MODE = false;
+    private static final int MAX_GUESSES = 6;
+
+    private final List<String> secretWordBank;
+    private final List<String> validWordBank;
+
     private ArrayList<Character> correctAnswerArrayList;
     private ArrayList<Character> guessArrayList;
 
     private int guesses = 0;
     private int gamesCompleted = 0;
+    private boolean gameOver = false;
+
+    private ArrayList<Character> greenLetters;
+    private ArrayList<Character> yellowLetters;
+    private ArrayList<Character> greyLetters;
+    private ArrayList<Character> darkGreyLetters;
 
     public Model(){
-        SECRET_WORD_BANK = readFile(SECRET_WORD_PATH);
-        VALID_WORD_BANK = readFile(VALID_WORD_PATH);
-        correctAnswerArrayList = new ArrayList<>(INITIAL_CAPACITY);
-        guessArrayList = new ArrayList<>(INITIAL_CAPACITY);
+        Path secretWordPath = Paths.get("resources/common.txt");
+        Path validWordPath = Paths.get("resources/words.txt");
+        secretWordBank = readFile(secretWordPath);
+        validWordBank = readFile(validWordPath);
+        correctAnswerArrayList = new ArrayList<>(5);
+        guessArrayList = new ArrayList<>(5);
+        greenLetters = new ArrayList<>();
+        yellowLetters = new ArrayList<>();
+        greyLetters = new ArrayList<>();
+        darkGreyLetters = new ArrayList<>();
     }
 
     protected ArrayList<Character> getCorrectAnswerArrayList() {
         return correctAnswerArrayList;
     }
-
     protected ArrayList<Character> getGuessArrayList() {
         return guessArrayList;
     }
@@ -48,9 +57,17 @@ public class Model extends Observable {
         return words;
     }
 
+    protected boolean isValid(String input) {
+        return validWordBank.contains(input);
+    }
+
+    protected boolean isGameOver() {
+        return gameOver;
+    }
+
     protected void setCorrectWord(int gamesCompleted) {
-        String word = SECRET_WORD_BANK.get(gamesCompleted);
-        toCharArrayList(word, getCorrectAnswerArrayList());
+        String word = secretWordBank.get(gamesCompleted);
+        toCharArrayList(word, correctAnswerArrayList);
     }
 
     protected void setGuessedWord(String guess) {
@@ -70,8 +87,8 @@ public class Model extends Observable {
     }
 
     protected void setRandomCorrectWord() {
-        String randomWord = SECRET_WORD_BANK.get((int)(Math.random() * SECRET_WORD_BANK.size() - 1));
-        toCharArrayList(randomWord, getCorrectAnswerArrayList());
+        String randomWord = secretWordBank.get((int)(Math.random() * secretWordBank.size() - 1));
+        toCharArrayList(randomWord, correctAnswerArrayList);
     }
 
     protected void toCharArrayList(String string, ArrayList<Character> arrayList) {
@@ -81,25 +98,64 @@ public class Model extends Observable {
         }
     }
 
-    protected void clear(ArrayList<Character> arrayList) {
-        arrayList.clear();
+    protected ArrayList<Character> getGreenLetters() {
+        return greenLetters;
+    }
+    protected ArrayList<Character> getYellowLetters() {
+        return yellowLetters;
+    }
+    protected ArrayList<Character> getDarkGreyLetters() {
+        return darkGreyLetters;
+    }
+    protected ArrayList<Character> getGreyLetters() {
+        return greyLetters;
     }
 
-    protected void removeLastLetter() {
-        guessArrayList.remove(guessArrayList.size()-1);
-        guessArrayList.trimToSize();
+
+
+    protected void checkForGreen() {
+        int index = 0;
+        for (char c : guessArrayList) {
+            if (c == correctAnswerArrayList.get(index))
+                greenLetters.add(c); index++;
+        }
+    }
+
+    protected void checkForYellow() {
+        int index = 0;
+        for (char c : guessArrayList) {
+            if (c != correctAnswerArrayList.get(index) && correctAnswerArrayList.contains(c))
+                yellowLetters.add(c); index++;
+        }
+    }
+
+    protected void checkForDarkGrey() {
+        for (char c : guessArrayList) {
+            if (!correctAnswerArrayList.contains(c))
+                darkGreyLetters.add(c);
+        }
+    }
+
+    protected void sortArrayList(ArrayList<Character> arrayList)  {
+        Collections.sort(arrayList);
     }
 
     /**
      * Methods for testing
      */
-    protected void printSecretWords() {
-        System.out.println(SECRET_WORD_BANK);
-    }
     protected void printGuessArrayList() {
         System.out.println(guessArrayList);
     }
     protected void printCorrectAnswerArrayList() {
         System.out.println(correctAnswerArrayList);
+    }
+    protected void printGreenLetters() {
+        System.out.println(greenLetters);
+    }
+    protected void printYellowLetters() {
+        System.out.println(yellowLetters);
+    }
+    protected void printDarkGreyLetters() {
+        System.out.println(darkGreyLetters);
     }
 }
