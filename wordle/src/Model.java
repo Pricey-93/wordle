@@ -11,6 +11,7 @@ public class Model extends Observable {
     private static final boolean TEST_MODE = false;
     private static final boolean RANDOM_MODE = false;
     private static final int MAX_GUESSES = 6;
+    private static final int MAX_WORD_LENGTH = 5;
 
     private final List<String> secretWordBank;
     private final List<String> validWordBank;
@@ -40,13 +41,6 @@ public class Model extends Observable {
         darkGreyLetters = new ArrayList<>();
     }
 
-    protected ArrayList<Character> getCorrectAnswerArrayList() {
-        return correctAnswerArrayList;
-    }
-    protected ArrayList<Character> getGuessArrayList() {
-        return guessArrayList;
-    }
-
     protected List<String> readFile (Path filePath) {
         List<String> words = null;
         try {
@@ -58,12 +52,19 @@ public class Model extends Observable {
     }
 
     protected boolean isValid(String input) {
-        return validWordBank.contains(input);
+        return validWordBank.contains(input) || secretWordBank.contains(input);
     }
-
     protected boolean isGameOver() {
         return gameOver;
     }
+    protected boolean isErrorMode() {return ERROR_MODE;}
+    protected boolean isTestMode() {return TEST_MODE;}
+    protected boolean isRandomMode() {return RANDOM_MODE;}
+    protected int getMaxGuesses() {return MAX_GUESSES;}
+    protected int getMaxWordLength() {return MAX_WORD_LENGTH;}
+    protected int getNumberOfGuesses() {return guesses;}
+
+    protected void setGameOver() {gameOver = true;}
 
     protected void setCorrectWord(int gamesCompleted) {
         String word = secretWordBank.get(gamesCompleted);
@@ -73,29 +74,26 @@ public class Model extends Observable {
     protected void setGuessedWord(String guess) {
         toCharArrayList(guess, guessArrayList);
     }
-
-    protected int getGamesCompleted() {
-        return gamesCompleted;
-    }
-
-    protected void increaseGamesCompleted() {
-        gamesCompleted += 1;
-    }
-
-    protected void increaseGuesses() {
-        guesses += 1;
-    }
-
     protected void setRandomCorrectWord() {
         String randomWord = secretWordBank.get((int)(Math.random() * secretWordBank.size() - 1));
         toCharArrayList(randomWord, correctAnswerArrayList);
     }
 
-    protected void toCharArrayList(String string, ArrayList<Character> arrayList) {
-        char[] chars = string.toCharArray();
-        for (char c : chars) {
-            arrayList.add(c);
-        }
+    protected ArrayList<Character> getCorrectAnswerArrayList() {
+        return correctAnswerArrayList;
+    }
+    protected ArrayList<Character> getGuessArrayList() {
+        return guessArrayList;
+    }
+
+    protected int getGamesCompleted() {
+        return gamesCompleted;
+    }
+    protected void increaseGamesCompleted() {
+        gamesCompleted += 1;
+    }
+    protected void increaseGuesses() {
+        guesses += 1;
     }
 
     protected ArrayList<Character> getGreenLetters() {
@@ -136,26 +134,14 @@ public class Model extends Observable {
         }
     }
 
-    protected void sortArrayList(ArrayList<Character> arrayList)  {
-        Collections.sort(arrayList);
+    protected void toCharArrayList(String string, ArrayList<Character> arrayList) {
+        char[] chars = string.toCharArray();
+        for (char c : chars) {
+            arrayList.add(c);
+        }
     }
 
-    /**
-     * Methods for testing
-     */
-    protected void printGuessArrayList() {
-        System.out.println(guessArrayList);
-    }
-    protected void printCorrectAnswerArrayList() {
-        System.out.println(correctAnswerArrayList);
-    }
-    protected void printGreenLetters() {
-        System.out.println(greenLetters);
-    }
-    protected void printYellowLetters() {
-        System.out.println(yellowLetters);
-    }
-    protected void printDarkGreyLetters() {
-        System.out.println(darkGreyLetters);
+    protected void sortArrayList(ArrayList<Character> arrayList)  {
+        Collections.sort(arrayList);
     }
 }
