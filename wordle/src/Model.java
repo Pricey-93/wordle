@@ -13,16 +13,15 @@ public class Model extends Observable {
     private static final int MAX_GUESSES = 6;
     private static final int MAX_WORD_LENGTH = 5;
 
+    private int guesses = 0;
+    private int gamesCompleted;
+    private boolean gameOver = false;
+
     private final List<String> secretWordBank;
     private final List<String> validWordBank;
 
     private final ArrayList<Character> correctAnswerArrayList;
     private final ArrayList<Character> guessArrayList;
-
-    private int guesses = 0;
-    private int gamesCompleted;
-    private boolean gameOver = false;
-
     private final ArrayList<Character> greenLetters;
     private final ArrayList<Character> yellowLetters;
     private final ArrayList<Character> greyLetters;
