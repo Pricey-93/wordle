@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -16,16 +17,16 @@ public class View implements Observer {
 
     private final Model model;
     private final Controller controller;
-    private String answer;
     private final String[] keyboardKeys = {"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P",
                                             "A", "S", "D", "F", "G", "H", "J", "K", "L",
                                             "Z", "X", "C", "V", "B", "N", "M",};
-    private JFrame frame;
+    private final ArrayList<JLabel> keyboardLabels = new ArrayList<>();
     private ArrayList<WordPanel> panels; // stores a reference to each panel (a panel holding an array of 5 JLabels)
-    private ArrayList<JLabel> keyboardLabels = new ArrayList<>();
+    private JFrame frame;
+    private String answer;
     private JPanel keyboardPanel, answerPanel, bottomPanel;
     private JLabel answerLabel;
-    private JTextField input;
+    private JTextField inputField;
     private JButton button;
 
 //----------------------------------WordPanel Inner Class---------------------------------
@@ -84,11 +85,11 @@ public class View implements Observer {
     }
     private void createBottomPanel() {
         bottomPanel = new JPanel();
-        input = new JTextField();
+        inputField = new JTextField(5);
         button = new JButton("Restart");
         button.setEnabled(false);
         bottomPanel.setLayout(new GridLayout(1, 2));
-        bottomPanel.add(input);
+        bottomPanel.add(inputField);
         bottomPanel.add(button);
         frame.add(bottomPanel);
     }
@@ -116,9 +117,23 @@ public class View implements Observer {
     protected void setAnswer(String answer) {
         this.answer = answer;
     }
+    protected String getInput() {
+        return inputField.getText();
+    }
+    protected void clearInputField() {
+        inputField.setText("");
+    }
     protected void enableButton() {
         button.setEnabled(true);
     }
+    protected void addInputListener(ActionListener listener) {
+        inputField.addActionListener(listener);
+    }
+    protected void displayErrorMessage(String message) {
+        JOptionPane.showMessageDialog(frame, message);
+    }
+
+
 
     /**
      * Test methods
