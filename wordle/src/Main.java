@@ -9,7 +9,7 @@ public class Main {
     }
     public static void createAndShowGUI() {
         model = new Model();
+        controller = new Controller(model);
         view = new View(model, controller);
-        controller = new Controller(model, view);
     }
 }

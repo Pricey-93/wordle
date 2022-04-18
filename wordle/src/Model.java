@@ -7,15 +7,15 @@ import java.util.*;
 
 public class Model extends Observable {
 
-    private static final boolean ERROR_MODE = false;
-    private static final boolean TEST_MODE = false;
-    private static final boolean RANDOM_MODE = true;
+    private static final boolean ERROR_MODE = true;
+    private static final boolean TEST_MODE = true;
+    private static final boolean RANDOM_MODE = false;
     private static final int MAX_GUESSES = 6;
     private static final int MAX_WORD_LENGTH = 5;
 
-    private int guesses = 0;
-    private int gamesCompleted;
-    private boolean gameOver = false;
+    private int guesses;
+    private int gamesCompleted = 0;
+    private boolean gameOver;
 
     private final List<String> secretWordBank;
     private final List<String> validWordBank;
@@ -38,9 +38,10 @@ public class Model extends Observable {
         yellowLetters = new ArrayList<>();
         greyLetters = new ArrayList<>();
         darkGreyLetters = new ArrayList<>();
+        initialise();
     }
 
-    protected List<String> readFile (Path filePath) {
+    private List<String> readFile (Path filePath) {
         List<String> words = null;
         try {
             words = Files.readAllLines(filePath, StandardCharsets.UTF_8);
@@ -48,6 +49,19 @@ public class Model extends Observable {
             e.printStackTrace();
         }
         return words;
+    }
+    protected void initialise() {
+        setGameOver(false);
+        guesses = 0;
+        getCorrectAnswerArrayList().clear();
+        greenLetters.clear();
+        yellowLetters.clear();
+        darkGreyLetters.clear();
+        if (isRandomMode()) {
+            setRandomCorrectWord();
+        } else {
+            setCorrectWord(getGamesCompleted());
+        }
     }
 
     protected boolean isValid(String input) {
@@ -64,7 +78,9 @@ public class Model extends Observable {
     protected int getNumberOfGuesses() {return guesses;}
     protected int getGamesCompleted() {return gamesCompleted;}
 
-    protected void setGameOver() {gameOver = true;}
+    protected void setGameOver(Boolean bool) {
+        gameOver = bool;
+    }
     protected void setCorrectWord(int gamesCompleted) {
         String word = secretWordBank.get(gamesCompleted);
         toCharArrayList(word, correctAnswerArrayList);
@@ -84,9 +100,9 @@ public class Model extends Observable {
     }
 
     protected void increaseGuesses() {
-        guesses += 1;
+        guesses++;
     }
-    protected void increaseGamesCompleted() {gamesCompleted += 1;}
+    protected void increaseGamesCompleted() {gamesCompleted++;}
     protected ArrayList<Character> getGreenLetters() {
         return greenLetters;
     }
@@ -103,22 +119,33 @@ public class Model extends Observable {
     protected void checkForGreen() {
         int index = 0;
         for (char c : guessArrayList) {
-            if (c == correctAnswerArrayList.get(index) && !greenLetters.contains(c))
-                greenLetters.add(c); index++;
+            if (c == correctAnswerArrayList.get(index) && !greenLetters.contains(c)) {
+                greenLetters.add(c);
+                index++;
+            }
         }
     }
     protected void checkForYellow() {
         int index = 0;
         for (char c : guessArrayList) {
-            if (c != correctAnswerArrayList.get(index) && correctAnswerArrayList.contains(c) && !yellowLetters.contains(c))
+            if (c != correctAnswerArrayList.get(index) && correctAnswerArrayList.contains(c) && !yellowLetters.contains(c)) {
                 yellowLetters.add(c); index++;
+            }
         }
     }
     protected void checkForDarkGrey() {
         for (char c : guessArrayList) {
-            if (!correctAnswerArrayList.contains(c) && !darkGreyLetters.contains(c))
+            if (!correctAnswerArrayList.contains(c) && !darkGreyLetters.contains(c)) {
                 darkGreyLetters.add(c);
+            }
         }
+    }
+    protected void checkColours() {
+        checkForGreen();
+        checkForYellow();
+        checkForDarkGrey();
+        setChanged();
+        notifyObservers(); // notify view after all checks have been done
     }
     protected void sortArrayList(ArrayList<Character> arrayList)  {
         Collections.sort(arrayList);

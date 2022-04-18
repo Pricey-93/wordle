@@ -1,36 +1,81 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 
-public class Controller implements Observer {
+
+public class Controller {
 
     private final Model model;
-    private final View view;
+    private View view;
 
-    public Controller(Model model, View view) {
-        this.model = model;
-        this.view = view;
-        model.addObserver(this);
-        this.view.addInputListener(new inputListener());
-
-    }
+//-------------------------Action listeners for GUI---------------------------
     private class inputListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-           if (model.isValid(view.getInput()) && view.getInput().length() == model.getMaxWordLength())
-               model.setGuessedWord(view.getInput());
-           else
-               view.displayErrorMessage("Enter a valid 5 letter word");
+            if (!isInputLengthValid()) {
+                refuseInput();
+            }
+            else if (model.isErrorMode() && !model.isValid(view.getInput())) {
+                refuseInput();
+            }
+            else {
+                passInput();
+                checkColours();
+                model.increaseGuesses();
+                toggleButton();
+                checkGameOver();
+                toggleInputField();
+                increaseGamesCompleted();
+            }
+        }
+        private void passInput() {
+            model.getGuessArrayList().clear();
+            model.setGuessedWord(view.getInput());
+            view.clearInputField();
+        }
+        private void refuseInput() {
+            view.displayErrorMessage("Word not valid or not length 5");
+            view.clearInputField();
+        }
+        private void checkGameOver() {
+            if (model.getNumberOfGuesses() >= model.getMaxGuesses() || model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
+                model.setGameOver(true);
+            }
+        }
+        private void increaseGamesCompleted() {
+            if (model.isGameOver()) {
+                model.increaseGamesCompleted();
+            }
+        }
+        private boolean isInputLengthValid() {
+            return view.getInput().length() == model.getMaxWordLength();
         }
     }
-
-
-
-    protected void toggleButton() {
-        view.enableButton();
+    private class buttonListener implements ActionListener {
+        public void actionPerformed(ActionEvent e) {
+            model.initialise();
+            view.restart();
+            toggleButton();
+            toggleInputField();
+        }
+    }
+//-------------------------Controller-----------------------------------------
+    public Controller(Model model) {
+        this.model = model;
     }
 
-    @Override
-    public void update(Observable o, Object arg) {}
+    public void setView(View view) {
+        this.view = view;
+    }
+    public void setListeners() {
+        this.view.addInputListener(new inputListener());
+        this.view.addButtonListener(new buttonListener());
+    }
+    protected void checkColours() {
+        model.checkColours();
+    }
+    protected void toggleButton() {
+        view.toggleButton(model.getNumberOfGuesses() > 0);
+    }
+    protected void toggleInputField() {
+        view.toggleInputField(!model.isGameOver());
+    }
 }

@@ -8,11 +8,6 @@ public class CLI {
         String input;
         Scanner scanner = new Scanner(System.in);
         model = new Model();
-        if (model.isRandomMode()){ //choose answer based on flags
-            model.setRandomCorrectWord();
-        }
-        else
-            model.setCorrectWord(model.getGamesCompleted());
 
         while (!model.isGameOver()) {
             model.getGuessArrayList().clear(); //clear the guess array of previous guesses
@@ -37,7 +32,7 @@ public class CLI {
             if (model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
                 displayWin();
                 model.increaseGamesCompleted();
-                model.setGameOver();
+                model.setGameOver(true);
             }
             else {
                 checkForColours();
@@ -48,7 +43,7 @@ public class CLI {
             if (model.getNumberOfGuesses() == model.getMaxGuesses()) {
                 displayLoss();
                 model.increaseGamesCompleted();
-                model.setGameOver();
+                model.setGameOver(true);
             }
         }
     }
