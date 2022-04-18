@@ -33,9 +33,8 @@ public class View implements Observer {
         private final JLabel[] charColumns = new JLabel[5];
 
         private WordPanel() { // panel holding a row of JLabels
-            Border border = BorderFactory.createLineBorder(WORDLE_GREY, 2);
+            Border border = BorderFactory.createLineBorder(WORDLE_GREY, 1);
             this.setLayout(new GridLayout(1, 5));
-            this.setSize(300, 300);
             for (int i = 0; i < 5; i++) {
                 charColumns[i] = new JLabel("", JLabel.CENTER);
                 charColumns[i].setOpaque(true);
@@ -119,7 +118,7 @@ public class View implements Observer {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
-        frame.setSize(500, 500);
+        frame.setSize(450, 600);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         frame.revalidate();

@@ -26,14 +26,17 @@ public class Controller {
                 increaseGamesCompleted();
             }
         }
+        private void refuseInput() {
+            view.displayErrorMessage("Word not valid or not length 5");
+            view.clearInputField();
+        }
         private void passInput() {
             model.getGuessArrayList().clear();
             model.setGuessedWord(view.getInput());
             view.clearInputField();
         }
-        private void refuseInput() {
-            view.displayErrorMessage("Word not valid or not length 5");
-            view.clearInputField();
+        private void checkColours() {
+            model.checkColours();
         }
         private void checkGameOver() {
             if (model.getNumberOfGuesses() >= model.getMaxGuesses() || model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
@@ -62,15 +65,12 @@ public class Controller {
         this.model = model;
     }
 
-    public void setView(View view) {
+    protected void setView(View view) {
         this.view = view;
     }
-    public void setListeners() {
+    protected void setListeners() {
         this.view.addInputListener(new inputListener());
         this.view.addButtonListener(new buttonListener());
-    }
-    protected void checkColours() {
-        model.checkColours();
     }
     protected void toggleButton() {
         view.toggleButton(model.getNumberOfGuesses() > 0);

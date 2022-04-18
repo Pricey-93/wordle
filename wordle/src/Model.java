@@ -8,7 +8,7 @@ import java.util.*;
 public class Model extends Observable {
 
     private static final boolean ERROR_MODE = true;
-    private static final boolean TEST_MODE = true;
+    private static final boolean TEST_MODE = false;
     private static final boolean RANDOM_MODE = false;
     private static final int MAX_GUESSES = 6;
     private static final int MAX_WORD_LENGTH = 5;
@@ -121,16 +121,17 @@ public class Model extends Observable {
         for (char c : guessArrayList) {
             if (c == correctAnswerArrayList.get(index) && !greenLetters.contains(c)) {
                 greenLetters.add(c);
-                index++;
             }
+            index++;
         }
     }
     protected void checkForYellow() {
         int index = 0;
         for (char c : guessArrayList) {
             if (c != correctAnswerArrayList.get(index) && correctAnswerArrayList.contains(c) && !yellowLetters.contains(c)) {
-                yellowLetters.add(c); index++;
+                yellowLetters.add(c);
             }
+            index++;
         }
     }
     protected void checkForDarkGrey() {
