@@ -9,11 +9,11 @@ public class Controller {
 
 //-------------------------Action listeners for GUI---------------------------
     private class inputListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) { //verify and then pass input on return keypress in inputField
             if (!isInputLengthValid()) {
                 refuseInput();
             }
-            else if (model.isErrorMode() && !model.isValid(view.getInput())) {
+            else if (model.isErrorMode() && !model.isValid(view.getInput())) { //guess is not in either word list
                 refuseInput();
             }
             else {
@@ -39,7 +39,8 @@ public class Controller {
             model.checkColours();
         }
         private void checkGameOver() {
-            if (model.getNumberOfGuesses() >= model.getMaxGuesses() || model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
+            if (model.getNumberOfGuesses() >= model.getMaxGuesses() ||
+                    model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) { //either won or guesses >= 6
                 model.setGameOver(true);
             }
         }
@@ -53,7 +54,7 @@ public class Controller {
         }
     }
     private class buttonListener implements ActionListener {
-        public void actionPerformed(ActionEvent e) {
+        public void actionPerformed(ActionEvent e) { //restart game when button is clicked
             model.initialise();
             view.restart();
             toggleButton();
@@ -75,7 +76,5 @@ public class Controller {
     protected void toggleButton() {
         view.toggleButton(model.getNumberOfGuesses() > 0);
     }
-    protected void toggleInputField() {
-        view.toggleInputField(!model.isGameOver());
-    }
+    protected void toggleInputField() {view.toggleInputField(!model.isGameOver());}
 }

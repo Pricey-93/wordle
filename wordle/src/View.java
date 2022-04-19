@@ -57,16 +57,16 @@ public class View implements Observer {
         this.model = model;
         this.controller = controller;
         controller.setView(this);
-
         model.addObserver(this);
+
         configureFrame();
         controller.setListeners();
-        toggleAnswerLabel();
+        toggleAnswerLabel(); //check model for testMode flag
     }
 
     private void createWordPanels() {
         wordPanels = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 6; i++) { // 6 rows of wordPanels, each containing 5 columns of JLabels
             wordPanels.add(new WordPanel());
             frame.add(wordPanels.get(i));
         }
@@ -124,14 +124,14 @@ public class View implements Observer {
         frame.revalidate();
     }
     protected void displayGuess() {
-        JLabel[] labels = getCharColumns(model.getNumberOfGuesses());
+        JLabel[] labels = getCharColumns(model.getNumberOfGuesses()); //get the column of the current row in play
         ArrayList<Character> list;
         list = model.getGuessArrayList();
 
         int i = 0;
         for (char c : list) {
             labels[i].setText(String.valueOf(c).toUpperCase());
-            if (model.getGreenLetters().contains(c)) {
+            if (model.getGreenLetters().contains(c) && model.getCorrectAnswerArrayList().get(i).equals(c)) { // only colour it green if it is in the exact position, even if it has been found on a previous turn
                 labels[i].setBackground(WORDLE_GREEN);
                 i++;
             }

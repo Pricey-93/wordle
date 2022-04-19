@@ -24,7 +24,6 @@ public class Model extends Observable {
     private final ArrayList<Character> guessArrayList;
     private final ArrayList<Character> greenLetters;
     private final ArrayList<Character> yellowLetters;
-    private final ArrayList<Character> greyLetters;
     private final ArrayList<Character> darkGreyLetters;
 
     public Model(){
@@ -36,11 +35,9 @@ public class Model extends Observable {
         guessArrayList = new ArrayList<>(5);
         greenLetters = new ArrayList<>();
         yellowLetters = new ArrayList<>();
-        greyLetters = new ArrayList<>();
         darkGreyLetters = new ArrayList<>();
         initialise();
     }
-
     private List<String> readFile (Path filePath) {
         List<String> words = null;
         try {
@@ -50,6 +47,7 @@ public class Model extends Observable {
         }
         return words;
     }
+
     protected void initialise() {
         setGameOver(false);
         guesses = 0;
@@ -112,14 +110,11 @@ public class Model extends Observable {
     protected ArrayList<Character> getDarkGreyLetters() {
         return darkGreyLetters;
     }
-    protected ArrayList<Character> getGreyLetters() {
-        return greyLetters;
-    }
 
     protected void checkForGreen() {
         int index = 0;
         for (char c : guessArrayList) {
-            if (c == correctAnswerArrayList.get(index) && !greenLetters.contains(c)) {
+            if (c == correctAnswerArrayList.get(index) && !greenLetters.contains(c)) { //if correct but already in green array, move to yellow array
                 greenLetters.add(c);
             }
             index++;
@@ -128,7 +123,7 @@ public class Model extends Observable {
     protected void checkForYellow() {
         int index = 0;
         for (char c : guessArrayList) {
-            if (c != correctAnswerArrayList.get(index) && correctAnswerArrayList.contains(c) && !yellowLetters.contains(c)) {
+            if (c != correctAnswerArrayList.get(index) && correctAnswerArrayList.contains(c) && !yellowLetters.contains(c)) { // present but in the wrong location
                 yellowLetters.add(c);
             }
             index++;
