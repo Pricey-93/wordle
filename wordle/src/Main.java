@@ -1,3 +1,6 @@
+/**
+ * @author Daniel Price 2022-04
+ */
 public class Main {
 
     static Model model;

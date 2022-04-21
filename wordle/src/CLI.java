@@ -1,5 +1,9 @@
 import java.util.Scanner;
 
+/**
+ * @author Daniel Price 2022-04
+ */
+
 public class CLI {
 
     static Model model;

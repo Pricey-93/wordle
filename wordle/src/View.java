@@ -1,10 +1,14 @@
 import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.*;
 import java.awt.event.ActionListener;
+import javax.swing.*;
+import javax.swing.border.Border;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+
+/**
+ * @author Daniel Price 2022-04
+ */
 
 public class View implements Observer {
 
