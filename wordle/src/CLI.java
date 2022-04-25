@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Scanner;
 
 /**
@@ -13,54 +15,57 @@ public class CLI {
         Scanner scanner = new Scanner(System.in);
         model = new Model();
 
-        while (!model.isGameOver()) {
-            model.getGuessArrayList().clear(); //clear the guess array of previous guesses
-            if (model.isTestMode())
-                printCorrectAnswerArrayList();
-            prompt();
-            input = scanner.nextLine();
-            if (model.isErrorMode()) {
-                while (!model.isValid(input)) {
-                    prompt();
-                    input = scanner.nextLine();
+        while (model.getGamesCompleted() < model.getSecretWordBankLength()) { //while we haven't guessed every possible word
+            while (!model.isGameOver()) {
+                model.getGuessArrayList().clear(); //clear the guess array of previous guesses
+                if (model.isTestMode())
+                    printCorrectAnswerArrayList();
+                prompt();
+                input = scanner.nextLine().toLowerCase();
+                if (model.isErrorMode()) {
+                    while (!model.isValid(input)) {
+                        prompt();
+                        input = scanner.nextLine().toLowerCase();
+                    }
+                } else {
+                    while (input.length() != model.getMaxWordLength()) {
+                        prompt();
+                        input = scanner.nextLine().toLowerCase();
+                    }
+                }
+                model.setGuessedWord(input);
+                printGuessArrayList();
+                if (model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
+                    displayWin();
+                    model.setGameOver(true);
+                } else {
+                    model.changeColours();
+                    sortColours();
+                    displayColourHints();
+                    model.increaseGuesses();
+                }
+                if (model.getNumberOfGuesses() == model.getMaxGuesses()) {
+                    displayLoss();
+                    model.setGameOver(true);
                 }
             }
-            else {
-                while (input.length() != model.getMaxWordLength()) {
-                    prompt();
-                    input = scanner.nextLine();
-                }
-            }
-            model.setGuessedWord(input);
-            printGuessArrayList();
-            if (model.getGuessArrayList().equals(model.getCorrectAnswerArrayList())) {
-                displayWin();
-                model.increaseGamesCompleted();
-                model.setGameOver(true);
-            }
-            else {
-                checkForColours();
-                sortColours();
-                displayColourHints();
-                model.increaseGuesses();
-            }
-            if (model.getNumberOfGuesses() == model.getMaxGuesses()) {
-                displayLoss();
-                model.increaseGamesCompleted();
-                model.setGameOver(true);
-            }
+            model.increaseGamesCompleted();
+            model.initialise();
+            announceNewGame();
         }
     }
 
-    public static void checkForColours() {
-        model.checkForGreen();
-        model.checkForYellow();
-        model.checkForDarkGrey();
-    }
+    //public static void changeColours() {
+    //    model.addToGreenLetters();
+    //    model.addToYellowLetters();
+    //    model.addToDarkGreyLetters();
+    //}
+
     public static void sortColours() {
-        model.sortArrayList(model.getGreenLetters());
-        model.sortArrayList(model.getYellowLetters());
-        model.sortArrayList(model.getDarkGreyLetters());
+        Collections.sort(model.getGreenLetters());
+        Collections.sort(model.getYellowLetters());
+        Collections.sort(model.getDarkGreyLetters());
+        Collections.sort(model.getGreyLetters());
     }
     public static void displayColourHints() {
         System.out.println("-------------Green Letters-------------------");
@@ -69,7 +74,13 @@ public class CLI {
         printYellowLetters();
         System.out.println("--------------Dark Grey Letters-----------------");
         printDarkGreyLetters();
+        System.out.println("------------------Grey Letters---------------------");
+        printGreyLetters();
         System.out.println("-------------------------------------------------");
+    }
+    public static void announceNewGame() {
+        System.out.println("You have completed: " + model.getGamesCompleted() + " game(s)!\n");
+        System.out.println("Starting next game...! \n");
     }
     public static void prompt() {System.out.println("enter a valid word with exactly 5 letters");}
     public static void printGuessArrayList() {System.out.println("Your guess is: " + model.getGuessArrayList());}
@@ -77,6 +88,7 @@ public class CLI {
     public static void printGreenLetters() {System.out.println(model.getGreenLetters());}
     public static void printYellowLetters() {System.out.println(model.getYellowLetters());}
     public static void printDarkGreyLetters() {System.out.println(model.getDarkGreyLetters());}
+    public static void printGreyLetters() {System.out.println(model.getGreyLetters());}
     public static void displayWin() {System.out.println("You won!");}
     public static void displayLoss() {System.out.println("You lost!");}
 }

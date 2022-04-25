@@ -11,17 +11,17 @@ public class Controller {
     private View view;
 
 //-------------------------Action listeners for GUI---------------------------
-    private class inputListener implements ActionListener {
+    private class InputListener implements ActionListener {
         public void actionPerformed(ActionEvent e) { //verify and then pass input on return keypress in inputField
             if (!isInputLengthValid()) {
                 refuseInput();
             }
-            else if (model.isErrorMode() && !model.isValid(view.getInput())) { //guess is not in either word list
+            else if (model.isErrorMode() && !model.isValid(view.getInput().toLowerCase())) { //guess is not in either word list
                 refuseInput();
             }
             else {
                 passInput();
-                checkColours();
+                changeColours();
                 model.increaseGuesses();
                 toggleButton();
                 checkGameOver();
@@ -35,11 +35,11 @@ public class Controller {
         }
         private void passInput() {
             model.getGuessArrayList().clear();
-            model.setGuessedWord(view.getInput());
+            model.setGuessedWord(view.getInput().toLowerCase());
             view.clearInputField();
         }
-        private void checkColours() {
-            model.checkColours();
+        private void changeColours() {
+            model.changeColours();
         }
         private void checkGameOver() {
             if (model.getNumberOfGuesses() >= model.getMaxGuesses() ||
@@ -56,7 +56,7 @@ public class Controller {
             return view.getInput().length() == model.getMaxWordLength();
         }
     }
-    private class buttonListener implements ActionListener {
+    private class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) { //restart game when button is clicked
             model.initialise();
             view.restart();
@@ -69,15 +69,15 @@ public class Controller {
         this.model = model;
     }
 
-    protected void setView(View view) {
+    public void setView(View view) {
         this.view = view;
     }
-    protected void setListeners() {
-        this.view.addInputListener(new inputListener());
-        this.view.addButtonListener(new buttonListener());
+    public void setListeners() {
+        this.view.addInputListener(new InputListener());
+        this.view.addButtonListener(new ButtonListener());
     }
-    protected void toggleButton() {
+    public void toggleButton() {
         view.toggleButton(model.getNumberOfGuesses() > 0);
     }
-    protected void toggleInputField() {view.toggleInputField(!model.isGameOver());}
+    public void toggleInputField() {view.toggleInputField(!model.isGameOver());}
 }

@@ -3,7 +3,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -15,8 +14,8 @@ import java.util.Observable;
 public class Model extends Observable {
 
     private static final boolean ERROR_MODE = true;
-    private static final boolean TEST_MODE = false;
-    private static final boolean RANDOM_MODE = true;
+    private static final boolean TEST_MODE = true;
+    private static final boolean RANDOM_MODE = false;
     private static final int MAX_GUESSES = 6;
     private static final int MAX_WORD_LENGTH = 5;
 
@@ -32,6 +31,7 @@ public class Model extends Observable {
     private final ArrayList<Character> greenLetters;
     private final ArrayList<Character> yellowLetters;
     private final ArrayList<Character> darkGreyLetters;
+    private final ArrayList<Character> greyLetters;
 
     public Model(){
         Path secretWordPath = Paths.get("resources/common.txt");
@@ -43,6 +43,7 @@ public class Model extends Observable {
         greenLetters = new ArrayList<>();
         yellowLetters = new ArrayList<>();
         darkGreyLetters = new ArrayList<>();
+        greyLetters = new ArrayList<>();
         initialise();
     }
     private List<String> readFile (Path filePath) {
@@ -67,13 +68,20 @@ public class Model extends Observable {
      * @pre true
      * @post true
      */
-    protected void initialise() {
+    public void initialise() {
         setGameOver(false);
         guesses = 0;
         getCorrectAnswerArrayList().clear();
         greenLetters.clear();
         yellowLetters.clear();
         darkGreyLetters.clear();
+        greyLetters.clear();
+        char[] chars = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
+                'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+                'z', 'x', 'c', 'v', 'b', 'n', 'm'};
+        for (char c : chars) {
+            greyLetters.add(c);
+        }
         if (isRandomMode()) {
             setRandomCorrectWord();
         } else {
@@ -87,7 +95,7 @@ public class Model extends Observable {
      * @post true
      * @return true iff input is present in validWordBank or secretWordBank
      */
-    protected boolean isValid(String input) {
+    public boolean isValid(String input) {
         assert input != null : "String value must not be null";
         return validWordBank.contains(input) || secretWordBank.contains(input);
     }
@@ -97,64 +105,71 @@ public class Model extends Observable {
      * @post true
      * @return gameOver
      */
-    protected boolean isGameOver() {return gameOver;}
+    public boolean isGameOver() {return gameOver;}
 
     /**
      * @pre true
      * @post true
      * @return ERROR_MODE
      */
-    protected boolean isErrorMode() {return ERROR_MODE;}
+    public boolean isErrorMode() {return ERROR_MODE;}
 
     /**
      * @pre true
      * @post true
      * @return TEST_MODE
      */
-    protected boolean isTestMode() {return TEST_MODE;}
+    public boolean isTestMode() {return TEST_MODE;}
 
     /**
      * @pre true
      * @post true
      * @return RANDOM_MODE
      */
-    protected boolean isRandomMode() {return RANDOM_MODE;}
+    public boolean isRandomMode() {return RANDOM_MODE;}
 
     /**
      * @pre true
      * @post true
      * @return MAX_GUESSES
      */
-    protected int getMaxGuesses() {return MAX_GUESSES;}
+    public int getMaxGuesses() {return MAX_GUESSES;}
 
     /**
      * @pre true
      * @post true
      * @return MAX_WORD_LENGTH
      */
-    protected int getMaxWordLength() {return MAX_WORD_LENGTH;}
+    public int getMaxWordLength() {return MAX_WORD_LENGTH;}
+
+    /**
+     * @pre true
+     * @post true
+     * @return secretWordBank.size()
+     */
+    public int getSecretWordBankLength() {return secretWordBank.size();}
 
     /**
      * @pre true
      * @post true
      * @return guesses
      */
-    protected int getNumberOfGuesses() {return guesses;}
+    public int getNumberOfGuesses() {return guesses;}
 
     /**
      * @pre true
      * @post true
      * @return gamesCompleted
      */
-    protected int getGamesCompleted() {return gamesCompleted;}
+    public int getGamesCompleted() {return gamesCompleted;}
 
     /**
      * @param bool true or false
      * @pre bool is not null
      * @post this.gameOver == (\old(gameOver) = bool)
      */
-    protected void setGameOver(Boolean bool) {
-        assert bool != null : "bool must be non-null boolean";
+    public void setGameOver(Boolean bool) {
+        assert bool != null : "must be non-null boolean";
         gameOver = bool;
     }
 
@@ -163,7 +178,7 @@ public class Model extends Observable {
      * @pre the amount of games completed is no less than 0 and no more than the size of secretWordBank
      * @post this.correctAnswerArrayList = \old(correctAnswerArrayList) + secretWordBank.get(gamesCompleted)
      */
-    protected void setCorrectWord(int gamesCompleted) {
+    public void setCorrectWord(int gamesCompleted) {
         assert gamesCompleted >= 0 && gamesCompleted <= secretWordBank.size():
                 "games completed must be between 0 and " + secretWordBank.size();
         String word = secretWordBank.get(gamesCompleted);
@@ -172,11 +187,11 @@ public class Model extends Observable {
 
     /**
      * @param guess String inputted by user
-     * @pre isValid(guess)
+     * @pre Guess string length is equal to MAX_WORD_LENGTH
      * @post this.guessArrayList == \old(guessArrayList) + guess
      */
-    protected void setGuessedWord(String guess) {
-        assert isValid(guess);
+    public void setGuessedWord(String guess) {
+        assert guess.length() == getMaxWordLength();
         toCharArrayList(guess, guessArrayList);
     }
 
@@ -184,7 +199,7 @@ public class Model extends Observable {
      * @pre true
      * @post this.correctAnswerArrayList == \old(correctAnswerArrayList) + randomWord
      */
-    protected void setRandomCorrectWord() {
+    public void setRandomCorrectWord() {
         String randomWord = secretWordBank.get((int)(Math.random() * secretWordBank.size() - 1));
         toCharArrayList(randomWord, correctAnswerArrayList);
     }
@@ -194,7 +209,7 @@ public class Model extends Observable {
      * @post true
      * @return correctAnswerArrayList
      */
-    protected ArrayList<Character> getCorrectAnswerArrayList() {
+    public ArrayList<Character> getCorrectAnswerArrayList() {
         return correctAnswerArrayList;
     }
 
@@ -203,7 +218,7 @@ public class Model extends Observable {
      * @post true
      * @return guessArrayList
      */
-    protected ArrayList<Character> getGuessArrayList() {
+    public ArrayList<Character> getGuessArrayList() {
         return guessArrayList;
     }
 
@@ -211,7 +226,7 @@ public class Model extends Observable {
      * @pre true
      * @post this.guesses == \old(guesses) + 1
      */
-    protected void increaseGuesses() {
+    public void increaseGuesses() {
         guesses++;
     }
 
@@ -219,14 +234,14 @@ public class Model extends Observable {
      * @pre true
      * @post this.gamesCompleted == \old(gamesCompleted) + 1
      */
-    protected void increaseGamesCompleted() {gamesCompleted++;}
+    public void increaseGamesCompleted() {gamesCompleted++;}
 
     /**
      * @pre true
      * @post true
      * @return greenLetters
      */
-    protected ArrayList<Character> getGreenLetters() {
+    public ArrayList<Character> getGreenLetters() {
         return greenLetters;
     }
 
@@ -235,7 +250,7 @@ public class Model extends Observable {
      * @post true
      * @return yellowLetters
      */
-    protected ArrayList<Character> getYellowLetters() {
+    public ArrayList<Character> getYellowLetters() {
         return yellowLetters;
     }
 
@@ -244,8 +259,17 @@ public class Model extends Observable {
      * @post true
      * @return darkGreyLetters
      */
-    protected ArrayList<Character> getDarkGreyLetters() {
+    public ArrayList<Character> getDarkGreyLetters() {
         return darkGreyLetters;
+    }
+
+    /**
+     * @pre true
+     * @post true
+     * @return greyLetters
+     */
+    public ArrayList<Character> getGreyLetters() {
+        return greyLetters;
     }
 
     /**
@@ -253,7 +277,7 @@ public class Model extends Observable {
      * @post char c of guessArrayList is added to greenLetters iff char at current index matches
      * the char at correctAnswerArrayList of the same index && char c is not already present in greenLetters
      */
-    protected void checkForGreen() {
+    public void addToGreenLetters() {
         assert !guessArrayList.isEmpty() && !correctAnswerArrayList.isEmpty();
         int index = 0;
         for (char c : guessArrayList) {
@@ -269,7 +293,7 @@ public class Model extends Observable {
      * @post char c is added to yellowLetters iff c is present in correctAnswerArrayList but not at the same index
      * && c is not already present in yellowLetters
      */
-    protected void checkForYellow() {
+    public void addToYellowLetters() {
         assert !guessArrayList.isEmpty() && !correctAnswerArrayList.isEmpty();
         int index = 0;
         for (char c : guessArrayList) {
@@ -285,7 +309,7 @@ public class Model extends Observable {
      * @post char c is added to darkGreyLetters iff c is not present in correctAnswerArray && not already present in
      * darkGreyLetters
      */
-    protected void checkForDarkGrey() {
+    public void addToDarkGreyLetters() {
         assert !guessArrayList.isEmpty() && !correctAnswerArrayList.isEmpty();
         for (char c : guessArrayList) {
             if (!correctAnswerArrayList.contains(c) && !darkGreyLetters.contains(c)) {
@@ -298,21 +322,22 @@ public class Model extends Observable {
      * @pre true
      * @post true
      */
-    protected void checkColours() {
-        checkForGreen();
-        checkForYellow();
-        checkForDarkGrey();
-        setChanged();
-        notifyObservers(); // notify view after all checks have been done
+    public void removeFromGreyLetters() { //remove letters that have already been found or guessed
+        greenLetters.forEach(greyLetters::remove);
+        yellowLetters.forEach(greyLetters::remove);
+        darkGreyLetters.forEach(greyLetters::remove);
     }
 
     /**
-     * @param arrayList the ArrayList object to be sorted
-     * @pre arrayList size is at least 2
-     * @post each char c of arrayList is arranged in alphabetical order
+     * @pre true
+     * @post true
      */
-    protected void sortArrayList(ArrayList<Character> arrayList) {
-        assert arrayList.size() > 1;
-        Collections.sort(arrayList);
+    public void changeColours() {
+        addToGreenLetters();
+        addToYellowLetters();
+        addToDarkGreyLetters();
+        removeFromGreyLetters();
+        setChanged();
+        notifyObservers(); // notify view after all changes have been made
     }
 }

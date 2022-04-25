@@ -65,7 +65,7 @@ public class View implements Observer {
 
         configureFrame();
         controller.setListeners();
-        toggleAnswerLabel(); //check model for testMode flag
+        toggleAnswerLabel(); //check model for testMode flag, reveal answer if testMode == true
     }
 
     private void createWordPanels() {
@@ -127,7 +127,7 @@ public class View implements Observer {
         frame.setVisible(true);
         frame.revalidate();
     }
-    protected void displayGuess() {
+    public void displayGuess() {
         JLabel[] labels = getCharColumns(model.getNumberOfGuesses()); //get the column of the current row in play
         ArrayList<Character> list;
         list = model.getGuessArrayList();
@@ -149,7 +149,7 @@ public class View implements Observer {
             }
         }
     }
-    protected void displayKeyboardColours() {
+    public void displayKeyboardColours() {
         for (JLabel l : keyboardLabels) {
             if (model.getGreenLetters().contains(l.getText().toLowerCase().charAt(0))) {
                 l.setBackground(WORDLE_GREEN);
@@ -162,28 +162,29 @@ public class View implements Observer {
             }
         }
     }
-    protected JLabel[] getCharColumns(int index) {return wordPanels.get(index).getCharColumns();}
-    protected void clearBoard() {
+    public JLabel[] getCharColumns(int index) {return wordPanels.get(index).getCharColumns();}
+    public String getInput() {return inputField.getText();}
+
+    public void setAnswerLabel(String answer) {answerLabel.setText(answer);}
+
+    public void toggleButton(boolean bool) {button.setEnabled(bool);}
+    public void toggleAnswerLabel() {answerLabel.setVisible(model.isTestMode());}
+    public void toggleInputField(boolean bool) {inputField.setEnabled(bool);}
+
+    public void addInputListener(ActionListener listener) {inputField.addActionListener(listener);}
+    public void addButtonListener(ActionListener listener) {button.addActionListener(listener);}
+    public void displayErrorMessage(String message) {JOptionPane.showMessageDialog(frame, message);}
+
+    public void clearGrid() {
         wordPanels.forEach(WordPanel::clearColumns);
     }
-    protected void clearKeyboard() {
+    public void clearKeyboard() {
         keyboardLabels.forEach(label -> label.setBackground(WORDLE_GREY));
     }
-
-    protected void setAnswerLabel(String answer) {answerLabel.setText(answer);}
-    protected String getInput() {return inputField.getText();}
-    protected void clearInputField() {inputField.setText("");}
-    protected void clearAnswerLabel() {answerLabel.setText("");}
-    protected void toggleButton(boolean bool) {button.setEnabled(bool);}
-    protected void toggleAnswerLabel() {answerLabel.setVisible(model.isTestMode());}
-    protected void toggleInputField(boolean bool) {inputField.setEnabled(bool);}
-
-    protected void addInputListener(ActionListener listener) {inputField.addActionListener(listener);}
-    protected void addButtonListener(ActionListener listener) {button.addActionListener(listener);}
-    protected void displayErrorMessage(String message) {JOptionPane.showMessageDialog(frame, message);}
-
-    protected void restart() {
-        clearBoard();
+    public void clearInputField() {inputField.setText("");}
+    public void clearAnswerLabel() {answerLabel.setText("");}
+    public void restart() {
+        clearGrid();
         clearKeyboard();
         clearAnswerLabel();
         setAnswerLabel(model.getCorrectAnswerArrayList().toString().trim().toUpperCase());
