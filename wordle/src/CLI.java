@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Scanner;
 
@@ -54,12 +53,6 @@ public class CLI {
             announceNewGame();
         }
     }
-
-    //public static void changeColours() {
-    //    model.addToGreenLetters();
-    //    model.addToYellowLetters();
-    //    model.addToDarkGreyLetters();
-    //}
 
     public static void sortColours() {
         Collections.sort(model.getGreenLetters());
