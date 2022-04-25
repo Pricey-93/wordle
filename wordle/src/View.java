@@ -1,7 +1,6 @@
 import java.awt.*;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
@@ -34,25 +33,25 @@ public class View implements Observer {
 
 //----------------------------------WordPanel Inner Class---------------------------------
     private static class WordPanel extends JPanel {
-        private final JLabel[] charColumns = new JLabel[5];
+        private final JLabel[] Columns = new JLabel[5];
 
         private WordPanel() { // panel holding a row of JLabels
-            Border border = BorderFactory.createLineBorder(WORDLE_GREY, 1);
             this.setLayout(new GridLayout(1, 5));
+
             for (int i = 0; i < 5; i++) {
-                charColumns[i] = new JLabel("", JLabel.CENTER);
-                charColumns[i].setOpaque(true);
-                charColumns[i].setForeground(WORDLE_WHITE);
-                charColumns[i].setBackground(WORDLE_BLACK);
-                charColumns[i].setBorder(border);
-                this.add(charColumns[i]);
+                Columns[i] = new JLabel("", JLabel.CENTER);
+                Columns[i].setOpaque(true);
+                Columns[i].setForeground(WORDLE_WHITE);
+                Columns[i].setBackground(WORDLE_BLACK);
+                Columns[i].setBorder(BorderFactory.createLineBorder(WORDLE_GREY, 1));
+                this.add(Columns[i]);
             }
         }
-        public JLabel[] getCharColumns() {return charColumns;}
+        public JLabel[] getColumns() {return Columns;}
         public void clearColumns() {
             for (int i = 0; i < 5; i++) {
-                charColumns[i].setText("");
-                charColumns[i].setBackground(WORDLE_BLACK);
+                Columns[i].setText("");
+                Columns[i].setBackground(WORDLE_BLACK);
             }
         }
     }
@@ -128,7 +127,7 @@ public class View implements Observer {
         frame.revalidate();
     }
     public void displayGuess() {
-        JLabel[] labels = getCharColumns(model.getNumberOfGuesses()); //get the column of the current row in play
+        JLabel[] labels = getColumns(model.getNumberOfGuesses()); //get the column of the current row in play
         ArrayList<Character> list;
         list = model.getGuessArrayList();
 
@@ -162,7 +161,7 @@ public class View implements Observer {
             }
         }
     }
-    public JLabel[] getCharColumns(int index) {return wordPanels.get(index).getCharColumns();}
+    public JLabel[] getColumns(int index) {return wordPanels.get(index).getColumns();}
     public String getInput() {return inputField.getText();}
 
     public void setAnswerLabel(String answer) {answerLabel.setText(answer);}
