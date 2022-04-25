@@ -8,6 +8,9 @@ import java.util.Scanner;
 public class CLI {
 
     static Model model;
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_YELLOW = "\u001B[33m";
+    public static final String ANSI_RESET = "\u001B[0m";
 
     public static void main(String[] args) {
         String input;
@@ -61,11 +64,11 @@ public class CLI {
         Collections.sort(model.getGreyLetters());
     }
     public static void displayColourHints() {
-        System.out.println("-------------Green Letters-------------------");
+        System.out.println(ANSI_GREEN + "-------------Green Letters-------------------");
         printGreenLetters();
-        System.out.println("--------------Yellow Letters-----------------");
+        System.out.println(ANSI_YELLOW + "--------------Yellow Letters-----------------");
         printYellowLetters();
-        System.out.println("--------------Dark Grey Letters-----------------");
+        System.out.println(ANSI_RESET + "--------------Dark Grey Letters-----------------");
         printDarkGreyLetters();
         System.out.println("------------------Grey Letters---------------------");
         printGreyLetters();
