@@ -13,7 +13,7 @@ import java.util.Observable;
 
 public class Model extends Observable {
 
-    private static final boolean ERROR_MODE = true;
+    private static final boolean ERROR_MODE = false;
     private static final boolean TEST_MODE = true;
     private static final boolean RANDOM_MODE = false;
     private static final int MAX_GUESSES = 6;
@@ -56,8 +56,6 @@ public class Model extends Observable {
         return words;
     }
     private void toCharArrayList(String string, ArrayList<Character> arrayList) {
-        assert string != null && !string.equals("");
-        assert arrayList.isEmpty();
         char[] chars = string.toCharArray();
         for (char c : chars) {
             arrayList.add(c);
