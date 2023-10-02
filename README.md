@@ -44,9 +44,9 @@ There is a secret word and you have six guesses to get the correct answer.
 
 The tech stack used for this project:
 
-* [Java](https://www.java.com/en/)
-* [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html)
-* [JUnit](https://junit.org/junit5/)
+* [Java](https://www.java.com/en/) - Main programming language
+* [Java Swing](https://docs.oracle.com/javase/tutorial/uiswing/start/index.html) - Java GUI component library
+* [JUnit](https://junit.org/junit5/) - Test framework
 
 ## Getting Started
 
