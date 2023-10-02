@@ -30,10 +30,10 @@ The game works the same as the original except that you can play again with no d
 
 There is a secret word and you have six guesses to get the correct answer.
 
-Green - The guessed letter is in the word and in the correct position.
-Yellow - The guessed letter is in the word and in the wrong position.
-Dark Grey - The guessed letter is not in the word.
-Black (keyboard view) - The letter has not been guessed yet.
+* Green - The guessed letter is in the word and in the correct position.
+* Yellow - The guessed letter is in the word and in the wrong position.
+* Dark Grey - The guessed letter is not in the word.
+* Black (keyboard view) - The letter has not been guessed yet.
 
 <img src="https://github.com/Pricey-93/wordle/assets/56130851/b3d2f3c5-566e-4284-bec2-b469189ee7fb" height="300" width="300">
 <img src="https://github.com/Pricey-93/wordle/assets/56130851/68b53e9f-d1e2-4822-b4d8-689d3b7d5ded" height="300" width="300">
