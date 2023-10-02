@@ -1,8 +1,6 @@
 <br/>
 <p align="center">
-  <a href="https://github.com/Pricey-93/Wordle">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+  <a href="https://github.com/Pricey-93/Wordle"></a>
 
   <h3 align="center">Wordle</h3>
 
@@ -27,7 +25,10 @@
 
 ## About The Project
 
-![Screen Shot](images/screenshot.png)
+![Wordle](https://github.com/Pricey-93/wordle/assets/56130851/14f79ad1-b9b9-4d85-ad23-b8031aa20a39)
+
+![Wordle](https://github.com/Pricey-93/wordle/assets/56130851/d22a9703-561d-4f8e-aaec-6f4d942a744c)
+![Wordle](https://github.com/Pricey-93/wordle/assets/56130851/9d4176f1-2505-423c-ba0d-e9d13d954333)
 
 I created this project in order to learn about the MVC software architectural design pattern. I also included the Observer pattern, using the view as a subscriber of the model.
 
