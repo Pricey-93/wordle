@@ -13,9 +13,9 @@ import java.util.Observable;
 
 public class Model extends Observable {
 
-    private static final boolean ERROR_MODE = false;
-    private static final boolean TEST_MODE = true;
-    private static final boolean RANDOM_MODE = false;
+    private static final boolean ERROR_MODE = true;
+    private static final boolean TEST_MODE = false;
+    private static final boolean RANDOM_MODE = true;
     private static final int MAX_GUESSES = 6;
     private static final int MAX_WORD_LENGTH = 5;
 

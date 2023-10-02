@@ -33,25 +33,25 @@ public class View implements Observer {
 
 //----------------------------------WordPanel Inner Class---------------------------------
     private static class WordPanel extends JPanel {
-        private final JLabel[] Columns = new JLabel[5];
+        private final JLabel[] columns = new JLabel[5];
 
         private WordPanel() { // panel holding a row of JLabels
             this.setLayout(new GridLayout(1, 5));
 
             for (int i = 0; i < 5; i++) {
-                Columns[i] = new JLabel("", JLabel.CENTER);
-                Columns[i].setOpaque(true);
-                Columns[i].setForeground(WORDLE_WHITE);
-                Columns[i].setBackground(WORDLE_BLACK);
-                Columns[i].setBorder(BorderFactory.createLineBorder(WORDLE_GREY, 1));
-                this.add(Columns[i]);
+                columns[i] = new JLabel("", JLabel.CENTER);
+                columns[i].setOpaque(true);
+                columns[i].setForeground(WORDLE_WHITE);
+                columns[i].setBackground(WORDLE_BLACK);
+                columns[i].setBorder(BorderFactory.createLineBorder(WORDLE_GREY, 1));
+                this.add(columns[i]);
             }
         }
-        public JLabel[] getColumns() {return Columns;}
+        public JLabel[] getColumns() {return columns;}
         public void clearColumns() {
             for (int i = 0; i < 5; i++) {
-                Columns[i].setText("");
-                Columns[i].setBackground(WORDLE_BLACK);
+                columns[i].setText("");
+                columns[i].setBackground(WORDLE_BLACK);
             }
         }
     }
